@@ -1,0 +1,13 @@
+---
+
+- name: Add repository for {{ es_major_version }}
+  yum_repository:
+    name: elasticsearch{{ es_major_version }}
+    description: EPEL YUM repo
+    baseurl: https://artifacts.elastic.co/packages/{{ es_major_version }}/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+
+- name: Installing ElasticSearch-{{ es_version }}
+  yum: name=elasticsearch-{{ es_version }} state=present update_cache=yes

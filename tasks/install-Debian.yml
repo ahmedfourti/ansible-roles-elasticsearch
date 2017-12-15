@@ -1,0 +1,9 @@
+---
+
+- name: Add apt key
+  apt_key:
+    keyserver: pgp.mit.edu
+    id: D88E42B4
+
+- name: Install Tranport https for Debian
+  apt: name=apt-transport-https state=latest update_cache=yes

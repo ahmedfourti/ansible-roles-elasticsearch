@@ -1,0 +1,4 @@
+---
+# handlers file for apache
+- name: elasticsearch reload
+  service: name=elasticsearch state=restarted

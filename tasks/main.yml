@@ -1,0 +1,11 @@
+---
+# tasks file for elasticsearch
+
+- include: install-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: install-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: configure.yml
+  when: ansible_os_family == 'RedHat'
