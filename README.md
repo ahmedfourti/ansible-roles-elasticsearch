@@ -1,38 +1,77 @@
 Role Name: ElasticSearch
 ========================
 
-A brief description of the role goes here.
+This role will install ElasticSearch.  
+You can install it as stand alone or as a cluster
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Java must be installed on every host  
+Get the role here : https://github.com/ahmedfourti/ansible-roles-java  
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+**package_state**: The package state (present, installed, latest, absent or removed)     
+**es_major_version**: The major ElasticSearch version to add repo (ie: 5.x, 6.x)   
+**es_version**: The ElasticSearch version to be installed (ie: 6.1, 5.1.1..)     
+**es_port**: The port to listen on, if not set, the default is 9200        
+**es_transport_port**: The port used for cluster communication, if not set, the default is 9300   
+**node_name**: The name of the node. If not set, the default will be the hostname    
+**cluster_name**: If you want to have a cluster, this must be set      
+**path_data**: The path for logs. Defaults to /var/lib/elasticsearch    
+**path_logs**: The path for logs. Defaults to /var/log/elasticsearch             
+**bootstrap_memory_lock**: Lock the memory at startup. Default to "false"  
+**minimum_master_nodes**: The number of minimum nodes to start cluster, this prevents "split brain". Set it only if you install cluster  
+**xms**: Minimum amout of Ram to start ElasticSearch (ie: 1g, 2g, 512M)    
+**xmx**: Maximum amout of Ram to start ElasticSearch (ie: 1g, 2g, 512M)       
 
-Dependencies
+Installation
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+You can get this role by using ```git clone``` command.  
+You can also add this repo to your ```requirements.yml``` and use ```ansible-galaxy install -r requirements.yml -p {{path_to_roles}}```  
+Or you can download and unzip it in your roles directory  
+
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+In this example, I have set a group [es-servers] in my inventory file.  
 
-    - hosts: servers
+    ---
+    - name: Deploying Demo
+      hosts:
+        - es-servers
       roles:
-         - { role: username.rolename, x: 42 }
+        - java
+        - elasticsearch
+      vars:
+      
+       #Role ElasticSearch
+        package_state: present
+        es_version: 6.1.0
+        es_major_version: 6.x
+        es_port: 9200
+        es_transport_port: 9300
+        node_name: test
+        cluster_name: demo-home
+        path_data: /var/lib/elasticsearch
+        path_logs: /var/log/elasticsearch
+        bootstrap_memory_lock: "false"
+        minimum_master_nodes: 2
+        xms: 512M
+        xmx: 512M
+        
+       #Role Java
+        java_packages_redhat:
+          - java-1.8.0-openjdk
+        java_packages_debian:
+          - oracle-java8-installer
 
 License
 -------
 
 BSD
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

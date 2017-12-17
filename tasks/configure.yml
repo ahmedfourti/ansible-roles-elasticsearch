@@ -15,4 +15,5 @@
   with_items:
     - { regexp: '^-Xms', replace: '-Xms{{ xms }}'}
     - { regexp: '^-Xmx', replace: '-Xmx{{ xmx }}'}
+  when: package_state == 'present' or package_state == 'latest'
   notify: elasticsearch reload

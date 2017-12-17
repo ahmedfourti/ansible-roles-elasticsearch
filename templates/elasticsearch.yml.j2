@@ -16,19 +16,19 @@ node.name: {% if node_name is defined %}{{ node_name }}{% else %}{{ ansible_host
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: {{ path_data }}
+path.data: {{ path_data | default('/var/lib/elasticsearch')}}
 
 #
 # Path to log files:
 #
-path.logs: {{ path_logs }}
+path.logs: {{ path_logs | default('/var/log/elasticsearch')}}
 
 #
 # ----------------------------------- Memory -----------------------------------
 #
 # Lock the memory on startup:
 #
-bootstrap.memory_lock: {{ bootstrap_memory_lock }}
+bootstrap.memory_lock: {{ bootstrap_memory_lock | default ('false')}}
 
 #
 # Make sure that the heap size is set to about half the memory available
