@@ -1,9 +1,23 @@
 ---
 
-- name: Add apt key
+- name: Add an apt key for ElasticSearch
   apt_key:
-    keyserver: pgp.mit.edu
-    id: D88E42B4
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elasticsearch repository for ES-{{ es_major_version }}
+  apt_repository:
+    repo: 'deb https://artifacts.elastic.co/packages/{{ es_major_version }}/apt stable main'
+    state: present
 
 - name: Install Tranport https for Debian
-  apt: name=apt-transport-https state=latest update_cache=yes
+  apt: name=apt-transport-https state=latest update_cache=yes purge=yes
+
+- name: Installing ElasticSearch-{{ es_version }}
+  apt:
+    name: elasticsearch={{ es_version }}
+    state: "{{ package_state }}"
+    update_cache: yes
+    purge: yes
+    autoremove: yes
+    autoclean: yes

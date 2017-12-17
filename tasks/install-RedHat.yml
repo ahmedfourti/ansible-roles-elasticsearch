@@ -10,4 +10,4 @@
     enabled: yes
 
 - name: Installing ElasticSearch-{{ es_version }}
-  yum: name=elasticsearch-{{ es_version }} state=present update_cache=yes
+  yum: name=elasticsearch-{{ es_version }} state={{ package_state }} update_cache=yes

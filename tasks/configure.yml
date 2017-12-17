@@ -5,3 +5,14 @@
     src: templates/elasticsearch.yml.j2
     dest: /etc/elasticsearch/elasticsearch.yml
   notify: elasticsearch reload
+  when: package_state == 'present' or package_state == 'latest'
+
+- name: Setup JVM options
+  lineinfile:
+    path: /etc/elasticsearch/jvm.options
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.replace }}"
+  with_items:
+    - { regexp: '^-Xms', replace: '-Xms{{ xms }}'}
+    - { regexp: '^-Xmx', replace: '-Xmx{{ xmx }}'}
+  notify: elasticsearch reload
