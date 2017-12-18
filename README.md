@@ -17,7 +17,8 @@ Role Variables
 **es_major_version**: The major ElasticSearch version to add repo (ie: 5.x, 6.x)   
 **es_version**: The ElasticSearch version to be installed (ie: 6.1, 5.1.1..)     
 **es_port**: The port to listen on, if not set, the default is 9200        
-**es_transport_port**: The port used for cluster communication, if not set, the default is 9300   
+**es_transport_port**: The port used for cluster communication, if not set, the default is 9300  
+**cluster**: Boolean. If true then make sure to set the right group name in the template at section "discovery.zen.ping.unicast.hosts"     
 **node_name**: The name of the node. If not set, the default will be the hostname    
 **cluster_name**: If you want to have a cluster, this must be set      
 **path_data**: The path for logs. Defaults to /var/lib/elasticsearch    
