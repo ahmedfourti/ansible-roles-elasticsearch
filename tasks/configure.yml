@@ -5,7 +5,6 @@
     src: templates/elasticsearch.yml.j2
     dest: /etc/elasticsearch/elasticsearch.yml
   notify: elasticsearch reload
-  when: package_state == 'present' or package_state == 'latest'
 
 - name: Setup JVM options
   lineinfile:
@@ -15,5 +14,11 @@
   with_items:
     - { regexp: '^-Xms', replace: '-Xms{{ xms }}'}
     - { regexp: '^-Xmx', replace: '-Xmx{{ xmx }}'}
-  when: package_state == 'present' or package_state == 'latest'
   notify: elasticsearch reload
+
+- name: Enable Lock Memory
+  lineinfile:
+    path: /usr/lib/systemd/system/elasticsearch.service
+    insertafter: '^# Disable timeout'
+    line: 'LimitMEMLOCK=infinity'
+  notify: reload systemd

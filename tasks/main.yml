@@ -8,3 +8,4 @@
   when: ansible_os_family == 'Debian'
 
 - include: configure.yml
+  when: package_state != 'absent'

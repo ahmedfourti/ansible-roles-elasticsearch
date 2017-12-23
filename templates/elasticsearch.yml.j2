@@ -11,7 +11,7 @@ cluster.name: {{ cluster_name }}
 #
 # Use a descriptive name for the node:
 #
-node.name: {% if node_name is defined %}{{ node_name }}{% else %}{{ ansible_hostname }}{% endif %}
+node.name: {% if node_name is defined %}{{ node_name }}{% else %} elasticsearch {% endif %}
 
 #
 # ----------------------------------- Paths ------------------------------------
@@ -30,7 +30,7 @@ path.logs: {{ path_logs | default('/var/log/elasticsearch')}}
 #
 # Lock the memory on startup:
 #
-bootstrap.memory_lock: {{ bootstrap_memory_lock | default ('false')}}
+bootstrap.memory_lock: {{  memory_lock | default ('false') | lower}}
 
 #
 # Make sure that the heap size is set to about half the memory available
@@ -44,7 +44,7 @@ bootstrap.memory_lock: {{ bootstrap_memory_lock | default ('false')}}
 #
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
-network.host: 127.0.0.1
+network.host: {% if ip_bind is defined %} {{ ip_bind }} {% else %} 127.0.0.1 {% endif %}
 
 #
 # Set a custom port for HTTP:
@@ -61,7 +61,7 @@ transport.tcp.port: {{ es_transport_port | default ('9300') }}
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
 {% if cluster %}
-discovery.zen.ping.unicast.hosts: ["{{ groups['es-servers'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join('", "') }}"]
+discovery.zen.ping.unicast.hosts: ["{{ es_group }}"]
 {% endif %}
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):

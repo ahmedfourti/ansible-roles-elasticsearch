@@ -21,3 +21,9 @@
     purge: yes
     autoremove: yes
     autoclean: yes
+
+- name: Start ElastiSearch on boot
+  service:
+    name: elasticsearch
+    enabled: yes
+  when: package_state != 'absent'
